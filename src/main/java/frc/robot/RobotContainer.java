@@ -4,6 +4,7 @@
 
 package frc.robot;
 
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
@@ -32,6 +33,8 @@ public class RobotContainer {
 
   /* Driver Buttons */
   private final JoystickButton zeroGyro = new JoystickButton(driver, XboxController.Button.kY.value);
+  private final JoystickButton spinLeft = new JoystickButton(driver, XboxController.Button.kLeftBumper.value);
+  private final JoystickButton spinRight = new JoystickButton(driver, XboxController.Button.kRightBumper.value);
 
   /* Subsystems */
   private final Swerve s_Swerve = new Swerve();
@@ -56,6 +59,12 @@ public class RobotContainer {
   private void configureButtonBindings() {
     /* Driver Buttons */
     zeroGyro.whenPressed(new InstantCommand(() -> s_Swerve.zeroIMU()));
+
+    Translation2d spinLeftOffset = new Translation2d(-Constants.Swerve.wheelBase / 2.0, Constants.Swerve.trackWidth / 2.0);
+    Translation2d spinRightOffset = new Translation2d(-Constants.Swerve.wheelBase / 2.0, -Constants.Swerve.trackWidth / 2.0);
+    
+    spinLeft.whileHeld(new SpinCommand(s_Swerve, spinLeftOffset, -Constants.Swerve.maxAngularVelocity));
+    spinRight.whileHeld(new SpinCommand(s_Swerve, spinRightOffset, Constants.Swerve.maxAngularVelocity));
   }
 
   /**

@@ -24,6 +24,8 @@ public class Swerve extends SubsystemBase {
 
     private Field2d m_field = new Field2d();
 
+    private Translation2d rotationCenterOffset;
+
     public Swerve() {
         IMU = new AHRS(SPI.Port.kMXP);
         IMU.zeroYaw();
@@ -31,6 +33,8 @@ public class Swerve extends SubsystemBase {
         SmartDashboard.putData("Field", m_field);
 
         swerveOdometry = new SwerveDriveOdometry(Constants.Swerve.swerveKinematics, getYaw());
+
+        resetRotationCenterOffset();
 
         mSwerveMods = new SwerveModule[] {
             new SwerveModule(0, Constants.Swerve.Mod0.constants),
@@ -52,8 +56,8 @@ public class Swerve extends SubsystemBase {
                                 : new ChassisSpeeds(
                                     translation.getX(), 
                                     translation.getY(), 
-                                    rotation)
-                                );
+                                    rotation),
+                                this.rotationCenterOffset);
         SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, Constants.Swerve.maxSpeed);
 
         for(SwerveModule mod : mSwerveMods){
@@ -87,11 +91,20 @@ public class Swerve extends SubsystemBase {
     }
 
     public Rotation2d getYaw() {
-        return IMU.getRotation2d();        
+        int invertMultiplier = (Constants.Swerve.invertGyro) ? -1 : 1;
+        return IMU.getRotation2d().times(invertMultiplier);
     }
 
     public void zeroIMU(){
         this.IMU.zeroYaw();
+    }
+
+    public void setRotationCenterOffset(Translation2d offset) {
+        this.rotationCenterOffset = offset;
+    }
+
+    public void resetRotationCenterOffset() {
+        this.rotationCenterOffset = new Translation2d(0, 0);
     }
 
     @Override
@@ -108,5 +121,7 @@ public class Swerve extends SubsystemBase {
         }
 
         SmartDashboard.putNumber("Gyro: ", getYaw().getDegrees());
+        SmartDashboard.putNumber("Center X", rotationCenterOffset.getX());
+        SmartDashboard.putNumber("Center Y", rotationCenterOffset.getY());
     }
 }
