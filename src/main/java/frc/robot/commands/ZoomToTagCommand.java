@@ -8,12 +8,13 @@ import frc.robot.Constants;
 import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.Swerve;
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.math.controller.ProfiledPIDController;
+import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class ZoomToTagCommand extends CommandBase {
-  private double rotation;
   private Translation2d translation;
   private boolean fieldRelative = true;
   private boolean openLoop = false;
@@ -27,9 +28,22 @@ public class ZoomToTagCommand extends CommandBase {
   //do we have a target?
   private boolean targetFound = false;
 
+  private ProfiledPIDController yController = 
+    new ProfiledPIDController(
+      1.0, 0.0, 0.1, 
+      new TrapezoidProfile.Constraints(Constants.Swerve.maxSpeed, Constants.Swerve.maxSpeed)
+    );
+
+  private ProfiledPIDController xController = 
+    new ProfiledPIDController(
+      1.0, 0.0, 0.1, 
+      new TrapezoidProfile.Constraints(Constants.Swerve.maxSpeed, Constants.Swerve.maxSpeed)
+    );
+
+
   //defaults for distance and offset tolerances (in meters)
   private double yTolerance = 1;
-  private double xTolerance = 0.1;
+  private double xTolerance = 0.25;
 
   /** Creates a new LLDrive. */
   public ZoomToTagCommand(Swerve s_Swerve, Limelight limelight, boolean fieldRelative, boolean openLoop) {
@@ -63,14 +77,22 @@ public class ZoomToTagCommand extends CommandBase {
       }
     }
 
-    //go ahead and subtract the yTolerance so it stops smoothly
-    double yAxis = s_Limelight.getYOffset() - this.yTolerance;
+    
+    double yAxis = s_Limelight.getYOffset();
     double xAxis = s_Limelight.getXOffset();
 
     SmartDashboard.putNumber("raw xOffset", xAxis);
     SmartDashboard.putNumber("raw yOffset", yAxis);
 
-    translation = new Translation2d(yAxis - (ratio * xAxis), xAxis).times(Constants.Swerve.maxSpeed);
+    xAxis = xController.calculate(xAxis, this.xTolerance);
+    //ratio and fix sign on yAxis movement
+    yAxis = Math.copySign(
+      Math.max((Math.abs(yAxis) - Math.abs(xAxis)), 0), 
+      yAxis);
+    yAxis = yController.calculate(yAxis, this.yTolerance);
+    
+
+    translation = new Translation2d(yAxis, xAxis);
     s_Swerve.drive(translation, 0, fieldRelative, openLoop);
     
   }
@@ -85,6 +107,6 @@ public class ZoomToTagCommand extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return s_Limelight.getYOffset() - this.yTolerance <= 0 && s_Limelight.getXOffset() <= this.xTolerance;
+    return yController.atGoal() && xController.atGoal();
   }
 }
