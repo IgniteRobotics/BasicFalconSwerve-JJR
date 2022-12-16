@@ -31,19 +31,22 @@ public class ZoomToTagCommand extends CommandBase {
   private ProfiledPIDController yController = 
     new ProfiledPIDController(
       1.0, 0.0, 0.1, 
-      new TrapezoidProfile.Constraints(Constants.Swerve.maxSpeed, Constants.Swerve.maxSpeed)
+      new TrapezoidProfile.Constraints(this.maxSpeed, this.maxAccel)
     );
 
   private ProfiledPIDController xController = 
     new ProfiledPIDController(
       1.0, 0.0, 0.1, 
-      new TrapezoidProfile.Constraints(Constants.Swerve.maxSpeed, Constants.Swerve.maxSpeed)
+      new TrapezoidProfile.Constraints(this.maxSpeed,this.maxAccel)
     );
 
 
   //defaults for distance and offset tolerances (in meters)
   private double yTolerance = 1;
   private double xTolerance = 0.25;
+
+  private double maxSpeed = Constants.Swerve.maxSpeed;
+  private double maxAccel = Constants.Swerve.maxSpeed/2;
 
   /** Creates a new LLDrive. */
   public ZoomToTagCommand(Swerve s_Swerve, Limelight limelight, boolean fieldRelative, boolean openLoop) {
@@ -52,12 +55,25 @@ public class ZoomToTagCommand extends CommandBase {
     addRequirements(s_Swerve);
 
     this.s_Limelight = limelight;
-
+    
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    this.yTolerance = SmartDashboard.getNumber("Zoom Y Tolerance", 1);
+    this.xTolerance = SmartDashboard.getNumber("Zoom X Tolerance", 0.25);
+
+    this.yController.setConstraints(new TrapezoidProfile.Constraints(
+      SmartDashboard.getNumber("Zoom Speed", maxSpeed), 
+      SmartDashboard.getNumber("Zoom Accel", maxAccel)
+      ));
+
+    this.xController.setConstraints(new TrapezoidProfile.Constraints(
+      SmartDashboard.getNumber("Zoom Speed", maxSpeed), 
+      SmartDashboard.getNumber("Zoom Accel", maxAccel)
+      ));
+
     this.ratio = 0;
     this.targetFound = false;
 

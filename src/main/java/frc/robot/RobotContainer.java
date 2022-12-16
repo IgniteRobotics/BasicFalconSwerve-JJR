@@ -30,20 +30,23 @@ public class RobotContainer {
   private final int translationAxis = XboxController.Axis.kLeftY.value;
   private final int strafeAxis = XboxController.Axis.kLeftX.value;
   private final int rotationAxis = XboxController.Axis.kRightX.value;
+  private final boolean fieldRelative = true;
+  private final boolean openLoop = false;
 
   /* Driver Buttons */
   private final JoystickButton zeroGyro = new JoystickButton(driver, XboxController.Button.kY.value);
   private final JoystickButton spinLeft = new JoystickButton(driver, XboxController.Button.kLeftBumper.value);
   private final JoystickButton spinRight = new JoystickButton(driver, XboxController.Button.kRightBumper.value);
+  private final JoystickButton driverAButton = new JoystickButton(driver, XboxController.Button.kA.value);
 
   /* Subsystems */
   private final Swerve s_Swerve = new Swerve();
+  private final Limelight s_Limelight = new Limelight();
 
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
-    boolean fieldRelative = true;
-    boolean openLoop = false;
+    
     s_Swerve.setDefaultCommand(new TeleopSwerve(s_Swerve, driver, translationAxis, strafeAxis, rotationAxis, fieldRelative, openLoop));
 
     // Configure the button bindings
@@ -65,6 +68,8 @@ public class RobotContainer {
     
     spinLeft.whileHeld(new SpinCommand(s_Swerve, spinLeftOffset, -Constants.Swerve.maxAngularVelocity));
     spinRight.whileHeld(new SpinCommand(s_Swerve, spinRightOffset, Constants.Swerve.maxAngularVelocity));
+
+    driverAButton.whileHeld(new ZoomToTagCommand(s_Swerve, s_Limelight, fieldRelative, openLoop));
   }
 
   /**
