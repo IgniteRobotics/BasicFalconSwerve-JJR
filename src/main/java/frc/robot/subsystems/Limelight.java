@@ -32,8 +32,11 @@ public class Limelight extends SubsystemBase {
   private ReportingNumber distanceReporter = new ReportingNumber("Limelight distance", ReportingLevel.COMPETITON);
   private ReportingBoolean tvReporter = new ReportingBoolean("Limelight tv", ReportingLevel.TEST);
 
+  //camera height from floor
   private final double h1 = 0.7112;
+  //target height from floor
   private final double h2 = 2.61;
+  //camera setback angle in degrees
   private final Measurement a1 = new Measurement(Unit.DEGREES, 35);
 
   private final int windowSize = 5;
@@ -78,6 +81,18 @@ public class Limelight extends SubsystemBase {
     if(!getTv()) return 0;
 
     return (h2 - h1) / Math.tan(Units.degToRad(getTy()) + a1.getAsRadians());
+  }
+
+  public double getXOffset(){
+    if(!getTv()) return 0;
+    
+    return ( (getDistance()/Math.sin(Units.degToRad(90))) * Math.sin(Units.degToRad(getTx())));
+  }
+
+  public double getYOffset(){
+    if(!getTv()) return 0;
+    
+    return ( (getDistance()/Math.sin(Units.degToRad(90))) * Math.sin(Units.degToRad(90 - getTx())));
   }
 
   public double getDistanceAverage() {
