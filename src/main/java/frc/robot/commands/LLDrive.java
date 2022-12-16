@@ -21,6 +21,12 @@ public class LLDrive extends CommandBase {
   private Swerve s_Swerve;
   private Limelight s_Limelight;
 
+  //ratio of y offset to x offset for scaling the curvature.
+  private double ratio = 0;
+
+  //do we have a target?
+  private boolean targetFound = false;
+
   /** Creates a new LLDrive. */
   public LLDrive(Swerve s_Swerve, Limelight limelight, boolean fieldRelative, boolean openLoop) {
     // Use addRequirements() here to declare subsystem dependencies.
@@ -33,20 +39,34 @@ public class LLDrive extends CommandBase {
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+    this.ratio = 0;
+    this.targetFound = false;
+
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    if (!targetFound) {
+      if (s_Limelight.getTv()){
+        targetFound = true;
+        ratio = s_Limelight.getTy() / s_Limelight.getTx();
+      } else {
+        //skip the rest if you haven't found a target.
+        //this starts driving in the same iteration we find a target.
+        return;
+      }
+    }
     double yAxis = s_Limelight.getTy();
     double xAxis = s_Limelight.getTx();
 
     SmartDashboard.putNumber("raw xOffset", xAxis);
     SmartDashboard.putNumber("raw yOffset", yAxis);
-    
-    
-    translation = new Translation2d(yAxis, xAxis).times(Constants.Swerve.maxSpeed);
+
+    translation = new Translation2d(yAxis - (ratio * xAxis), xAxis).times(Constants.Swerve.maxSpeed);
     s_Swerve.drive(translation, 0, fieldRelative, openLoop);
+    
   }
 
   // Called once the command ends or is interrupted.
