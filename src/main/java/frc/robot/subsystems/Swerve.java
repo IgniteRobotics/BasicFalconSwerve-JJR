@@ -95,6 +95,10 @@ public class Swerve extends SubsystemBase {
         return IMU.getRotation2d().times(invertMultiplier);
     }
 
+    public double getHeadingDegrees() {
+        return this.getYaw().getDegrees();
+    }
+
     public void zeroIMU(){
         this.IMU.zeroYaw();
     }

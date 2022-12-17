@@ -30,13 +30,13 @@ public class ZoomToTagCommand extends CommandBase {
 
   private ProfiledPIDController yController = 
     new ProfiledPIDController(
-      1.0, 0.0, 0.1, 
+      1.0, 0.0, 0.01, 
       new TrapezoidProfile.Constraints(this.maxSpeed, this.maxAccel)
     );
 
   private ProfiledPIDController xController = 
     new ProfiledPIDController(
-      1.0, 0.0, 0.1, 
+      1.0, 0.0, 0.01, 
       new TrapezoidProfile.Constraints(this.maxSpeed,this.maxAccel)
     );
 

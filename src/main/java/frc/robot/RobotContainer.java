@@ -11,7 +11,7 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-
+import edu.wpi.first.wpilibj2.command.button.POVButton;
 import frc.robot.autos.*;
 import frc.robot.commands.*;
 import frc.robot.subsystems.*;
@@ -38,6 +38,11 @@ public class RobotContainer {
   private final JoystickButton spinLeft = new JoystickButton(driver, XboxController.Button.kLeftBumper.value);
   private final JoystickButton spinRight = new JoystickButton(driver, XboxController.Button.kRightBumper.value);
   private final JoystickButton driverAButton = new JoystickButton(driver, XboxController.Button.kA.value);
+
+  private POVButton driverDpadUp = new POVButton(driver, 0);
+  private POVButton driverDpadDown = new POVButton(driver, 180);
+  private POVButton driverDpadLeft = new POVButton(driver, 270);
+  private POVButton driverDpadRight = new POVButton(driver, 90);
 
   /* Subsystems */
   private final Swerve s_Swerve = new Swerve();
@@ -70,6 +75,10 @@ public class RobotContainer {
     spinRight.whileHeld(new SpinCommand(s_Swerve, spinRightOffset, Constants.Swerve.maxAngularVelocity));
 
     driverAButton.whileHeld(new ZoomToTagCommand(s_Swerve, s_Limelight, fieldRelative, openLoop));
+    driverDpadUp.whenPressed(new SnapToHeading(s_Swerve, 0));
+    driverDpadDown.whenPressed(new SnapToHeading(s_Swerve, 180));
+    driverDpadLeft.whenPressed(new SnapToHeading(s_Swerve, 90));
+    driverDpadRight.whenPressed(new SnapToHeading(s_Swerve, 270));
   }
 
   /**
