@@ -85,7 +85,13 @@ public class ZoomToTagCommand extends CommandBase {
     if (!targetFound) {
       if (s_Limelight.getTv()){
         targetFound = true;
-        ratio = s_Limelight.getYOffset() / s_Limelight.getXOffset();
+        //scale the xoffset up if it's smaller than the Y.
+        //otherwise it's 1.
+        if (s_Limelight.getYOffset() > s_Limelight.getXOffset()) {
+          ratio = s_Limelight.getYOffset() / s_Limelight.getXOffset();
+        } else {
+          ratio = 1;
+        }
       } else {
         //skip the rest if you haven't found a target.
         //this starts driving in the same iteration we find a target.
@@ -103,7 +109,7 @@ public class ZoomToTagCommand extends CommandBase {
     xAxis = xController.calculate(xAxis, this.xTolerance);
     //ratio and fix sign on yAxis movement
     yAxis = Math.copySign(
-      Math.max((Math.abs(yAxis) - Math.abs(xAxis)), 0), 
+      Math.max((Math.abs(yAxis) - Math.abs(xAxis)*ratio), 0), 
       yAxis);
     yAxis = yController.calculate(yAxis, this.yTolerance);
     
