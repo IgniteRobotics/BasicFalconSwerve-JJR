@@ -36,7 +36,7 @@ public class ZoomToTagCommand extends CommandBase {
 
   private ProfiledPIDController xController = 
     new ProfiledPIDController(
-      1.0, 0.0, 0.01, 
+      2.0, 0.0, 0.01, 
       new TrapezoidProfile.Constraints(this.maxSpeed,this.maxAccel)
     );
 
@@ -107,10 +107,11 @@ public class ZoomToTagCommand extends CommandBase {
     SmartDashboard.putNumber("raw yOffset", yAxis);
 
     xAxis = xController.calculate(xAxis, this.xTolerance);
+    //TRYING changing the PID controller instead.
     //ratio and fix sign on yAxis movement
-    yAxis = Math.copySign(
-      Math.max((Math.abs(yAxis) - Math.abs(xAxis)*ratio), 0), 
-      yAxis);
+    // yAxis = Math.copySign(
+    //   Math.max((Math.abs(yAxis) - Math.abs(xAxis)*ratio), 0), 
+    //   yAxis);
     yAxis = yController.calculate(yAxis, this.yTolerance);
     
 
