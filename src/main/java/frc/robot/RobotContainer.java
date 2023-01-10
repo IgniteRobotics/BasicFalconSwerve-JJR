@@ -63,8 +63,8 @@ public class RobotContainer {
     Translation2d spinLeftOffset = new Translation2d(-Constants.Swerve.wheelBase / 2.0, Constants.Swerve.trackWidth / 2.0);
     Translation2d spinRightOffset = new Translation2d(-Constants.Swerve.wheelBase / 2.0, -Constants.Swerve.trackWidth / 2.0);
     
-    spinLeft.whileHeld(new SpinCommand(s_Swerve, spinLeftOffset, -Constants.Swerve.maxAngularVelocity));
-    spinRight.whileHeld(new SpinCommand(s_Swerve, spinRightOffset, Constants.Swerve.maxAngularVelocity));
+    spinLeft.whileHeld(new SpinCommand(s_Swerve, driver, translationAxis, strafeAxis, spinLeftOffset, -Constants.Swerve.maxAngularVelocity));
+    spinRight.whileHeld(new SpinCommand(s_Swerve, driver, translationAxis, strafeAxis, spinRightOffset, Constants.Swerve.maxAngularVelocity));
   }
 
   /**
