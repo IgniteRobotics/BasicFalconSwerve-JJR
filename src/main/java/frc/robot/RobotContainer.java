@@ -4,7 +4,8 @@
 
 package frc.robot;
 
-import edu.wpi.first.math.geometry.Translation2d;
+import com.igniterobotics.robotbase.preferences.*;
+
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
@@ -36,6 +37,10 @@ public class RobotContainer {
   private final JoystickButton spinLeft = new JoystickButton(driver, XboxController.Button.kLeftBumper.value);
   private final JoystickButton spinRight = new JoystickButton(driver, XboxController.Button.kRightBumper.value);
 
+  /* Preferences */
+  private DoublePreference spinOffsetX = new DoublePreference("Spin Offset X", Constants.Swerve.wheelBase / 2);
+  private DoublePreference spinOffsetY = new DoublePreference("Spin Offset Y", Constants.Swerve.trackWidth / 2);
+  
   /* Subsystems */
   private final Swerve s_Swerve = new Swerve();
 
@@ -60,11 +65,8 @@ public class RobotContainer {
     /* Driver Buttons */
     zeroGyro.whenPressed(new InstantCommand(() -> s_Swerve.zeroIMU()));
 
-    Translation2d spinLeftOffset = new Translation2d(-Constants.Swerve.wheelBase / 2.0, Constants.Swerve.trackWidth / 2.0);
-    Translation2d spinRightOffset = new Translation2d(-Constants.Swerve.wheelBase / 2.0, -Constants.Swerve.trackWidth / 2.0);
-    
-    spinLeft.whileHeld(new SpinCommand(s_Swerve, driver, translationAxis, strafeAxis, spinLeftOffset, -Constants.Swerve.maxAngularVelocity));
-    spinRight.whileHeld(new SpinCommand(s_Swerve, driver, translationAxis, strafeAxis, spinRightOffset, Constants.Swerve.maxAngularVelocity));
+    spinLeft.whileHeld(new SpinCommand(s_Swerve, driver, translationAxis, strafeAxis, spinOffsetX, spinOffsetY, -Constants.Swerve.maxAngularVelocity));
+    spinRight.whileHeld(new SpinCommand(s_Swerve, driver, translationAxis, strafeAxis, spinOffsetX, spinOffsetY, Constants.Swerve.maxAngularVelocity));
   }
 
   /**
