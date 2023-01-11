@@ -35,7 +35,7 @@ public class SpinCommand extends CommandBase {
     public void initialize() {
         // Decide where to move center based on spin direction
         double offsetY = rotationSpeed < 0 ? -centerOffsetY.get() : centerOffsetY.get();
-
+        
         s_Swerve.setRotationCenterOffset(new Translation2d(centerOffsetX.get(), offsetY));
     }
 
