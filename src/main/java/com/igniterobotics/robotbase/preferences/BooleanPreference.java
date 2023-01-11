@@ -1,5 +1,6 @@
 package com.igniterobotics.robotbase.preferences;
 
+import edu.wpi.first.wpilibj.Preferences;
 
 public class BooleanPreference extends RobotPreference<Boolean> {
     private boolean defaultValue;
@@ -12,11 +13,11 @@ public class BooleanPreference extends RobotPreference<Boolean> {
         super(key);
         this.defaultValue = defaultValue;
 
-        preferences.initBoolean(key, defaultValue);
+        Preferences.initBoolean(key, defaultValue);
     }
 
     public boolean getValue() {
-        return preferences.getBoolean(super.key, defaultValue);
+        return Preferences.getBoolean(super.key, defaultValue);
     }
 
     @Override

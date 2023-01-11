@@ -11,7 +11,7 @@ public class ReportingManager {
         return reportingLevel;
     }
 
-    public static boolean isReportable(ReportingType reportingType) {
+    public static boolean isReportable(ReportingType<?> reportingType) {
         return reportingType.getLevel().level >= reportingLevel.level;
     }
 }

@@ -1,5 +1,6 @@
 package com.igniterobotics.robotbase.preferences;
 
+import edu.wpi.first.wpilibj.Preferences;
 
 public class DoublePreference extends RobotPreference<Double> {
     private double defaultValue;
@@ -12,11 +13,11 @@ public class DoublePreference extends RobotPreference<Double> {
         super(key);
         this.defaultValue = defaultValue;
 
-        preferences.initDouble(key, defaultValue);
+        Preferences.initDouble(key, defaultValue);
     }
 
     public double getValue() {
-        return preferences.getDouble(super.key, defaultValue);
+        return Preferences.getDouble(super.key, defaultValue);
     }
 
     @Override
