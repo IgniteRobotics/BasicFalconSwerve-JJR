@@ -63,10 +63,10 @@ public class RobotContainer {
    */
   private void configureButtonBindings() {
     /* Driver Buttons */
-    zeroGyro.whenPressed(new InstantCommand(() -> s_Swerve.zeroIMU()));
+    zeroGyro.onTrue(new InstantCommand(() -> s_Swerve.zeroIMU()));
 
-    spinLeft.whileHeld(new SpinCommand(s_Swerve, driver, translationAxis, strafeAxis, spinOffsetX, spinOffsetY, -Constants.Swerve.maxAngularVelocity));
-    spinRight.whileHeld(new SpinCommand(s_Swerve, driver, translationAxis, strafeAxis, spinOffsetX, spinOffsetY, Constants.Swerve.maxAngularVelocity));
+    spinLeft.whileTrue(new SpinCommand(s_Swerve, driver, translationAxis, strafeAxis, spinOffsetX, spinOffsetY, -Constants.Swerve.maxAngularVelocity));
+    spinRight.whileTrue(new SpinCommand(s_Swerve, driver, translationAxis, strafeAxis, spinOffsetX, spinOffsetY, Constants.Swerve.maxAngularVelocity));
   }
 
   /**

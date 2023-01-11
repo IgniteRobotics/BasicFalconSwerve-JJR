@@ -1,5 +1,7 @@
 package com.igniterobotics.robotbase.preferences;
 
+import edu.wpi.first.wpilibj.Preferences;
+
 public class StringPreference extends RobotPreference<String> {
     private String defaultValue;
 
@@ -11,11 +13,11 @@ public class StringPreference extends RobotPreference<String> {
         super(key);
         this.defaultValue = defaultValue;
 
-        preferences.initString(key, defaultValue);
+        Preferences.initString(key, defaultValue);
     }
 
     public String getValue() {
-        return preferences.getString(super.key, defaultValue);
+        return Preferences.getString(super.key, defaultValue);
     }
 
     @Override
