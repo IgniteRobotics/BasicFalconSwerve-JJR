@@ -13,7 +13,6 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
-import frc.robot.autos.*;
 import frc.robot.commands.*;
 import frc.robot.subsystems.*;
 
@@ -38,8 +37,8 @@ public class RobotContainer {
   private final JoystickButton spinRight = new JoystickButton(driver, XboxController.Button.kRightBumper.value);
 
   /* Preferences */
-  private DoublePreference spinOffsetX = new DoublePreference("Spin Offset X", Constants.Swerve.wheelBase / 2);
-  private DoublePreference spinOffsetY = new DoublePreference("Spin Offset Y", Constants.Swerve.trackWidth / 2);
+  private DoublePreference spinOffsetX = new DoublePreference("Spin Offset Y", Constants.Swerve.wheelBase / 2);
+  private DoublePreference spinOffsetY = new DoublePreference("Spin Offset X", Constants.Swerve.trackWidth / 2);
   
   /* Subsystems */
   private final Swerve s_Swerve = new Swerve();
@@ -76,6 +75,6 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // An ExampleCommand will run in autonomous
-    return new exampleAuto(s_Swerve);
+    return new AutoBalance(s_Swerve); // for testing purposes only :D
   }
 }

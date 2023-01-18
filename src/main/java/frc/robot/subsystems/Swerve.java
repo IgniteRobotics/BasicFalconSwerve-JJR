@@ -96,6 +96,14 @@ public class Swerve extends SubsystemBase {
         return IMU.getRotation2d().times(invertMultiplier);
     }
 
+    public double getPitch() {
+        return IMU.getPitch();
+    }
+
+    public double getRoll() {
+        return IMU.getRoll();
+    }
+
     public void zeroIMU(){
         this.IMU.zeroYaw();
     }
