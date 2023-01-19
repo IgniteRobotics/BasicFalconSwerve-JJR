@@ -5,6 +5,8 @@
 package frc.robot;
 
 import edu.wpi.first.math.geometry.Translation2d;
+import com.igniterobotics.robotbase.preferences.*;
+
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
@@ -44,6 +46,10 @@ public class RobotContainer {
   private POVButton driverDpadLeft = new POVButton(driver, 270);
   private POVButton driverDpadRight = new POVButton(driver, 90);
 
+  /* Preferences */
+  private DoublePreference spinOffsetX = new DoublePreference("Spin Offset X", Constants.Swerve.wheelBase / 2);
+  private DoublePreference spinOffsetY = new DoublePreference("Spin Offset Y", Constants.Swerve.trackWidth / 2);
+  
   /* Subsystems */
   private final Swerve s_Swerve = new Swerve();
   private final Limelight s_Limelight = new Limelight();
@@ -71,14 +77,16 @@ public class RobotContainer {
     Translation2d spinLeftOffset = new Translation2d(-Constants.Swerve.wheelBase / 2.0, Constants.Swerve.trackWidth / 2.0);
     Translation2d spinRightOffset = new Translation2d(-Constants.Swerve.wheelBase / 2.0, -Constants.Swerve.trackWidth / 2.0);
     
-    spinLeft.whileHeld(new SpinCommand(s_Swerve, spinLeftOffset, -Constants.Swerve.maxAngularVelocity));
-    spinRight.whileHeld(new SpinCommand(s_Swerve, spinRightOffset, Constants.Swerve.maxAngularVelocity));
-
+    
     driverAButton.whileHeld(new ZoomToTagCommand(s_Swerve, s_Limelight, fieldRelative, openLoop));
     driverDpadUp.whenPressed(new SnapToHeading(s_Swerve, 0));
     driverDpadDown.whenPressed(new SnapToHeading(s_Swerve, 180));
     driverDpadLeft.whenPressed(new SnapToHeading(s_Swerve, 90));
     driverDpadRight.whenPressed(new SnapToHeading(s_Swerve, 270));
+    zeroGyro.onTrue(new InstantCommand(() -> s_Swerve.zeroIMU()));
+
+    spinLeft.whileTrue(new SpinCommand(s_Swerve, driver, translationAxis, strafeAxis, spinOffsetX, spinOffsetY, -Constants.Swerve.maxAngularVelocity));
+    spinRight.whileTrue(new SpinCommand(s_Swerve, driver, translationAxis, strafeAxis, spinOffsetX, spinOffsetY, Constants.Swerve.maxAngularVelocity));
   }
 
   /**

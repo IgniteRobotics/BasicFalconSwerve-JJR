@@ -6,8 +6,6 @@ import java.util.function.Supplier;
 import edu.wpi.first.wpilibj.Preferences;
 
 public abstract class RobotPreference<T> implements Supplier<T> {
-    protected static Preferences preferences = Preferences.getInstance();
-    
     protected String key;
 
     public RobotPreference(String key) {
@@ -15,14 +13,14 @@ public abstract class RobotPreference<T> implements Supplier<T> {
     }
 
     public void remove() {
-        preferences.remove(key);
+        Preferences.remove(key);
     }
 
     public static void removeAll() {
-        preferences.removeAll();
+        Preferences.removeAll();
     }
 
     public static Collection<String> getKeys() {
-        return preferences.getKeys();
+        return Preferences.getKeys();
     }
 }

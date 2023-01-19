@@ -1,5 +1,6 @@
 package com.igniterobotics.robotbase.preferences;
 
+import edu.wpi.first.wpilibj.Preferences;
 
 public class IntegerPreference extends RobotPreference<Integer> {
     private int defaultValue;
@@ -12,11 +13,11 @@ public class IntegerPreference extends RobotPreference<Integer> {
         super(key);
         this.defaultValue = defaultValue;
 
-        preferences.initInt(key,defaultValue);
+        Preferences.initInt(key,defaultValue);
     }
 
     public int getValue() {
-        return preferences.getInt(super.key, defaultValue);
+        return Preferences.getInt(super.key, defaultValue);
     }
 
     @Override
