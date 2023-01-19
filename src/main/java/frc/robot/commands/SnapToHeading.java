@@ -23,9 +23,9 @@ public class SnapToHeading extends ProfiledPIDCommand {
         // The ProfiledPIDController used by the command
         new ProfiledPIDController(
             // The PID gains
-            1,
+            0.8,
             0,
-            0.01,
+            0,
             // The motion profile constraints
             new TrapezoidProfile.Constraints(Constants.Swerve.maxAngularVelocity, Constants.Swerve.maxAngularVelocity)),
         // This should return the measurement
