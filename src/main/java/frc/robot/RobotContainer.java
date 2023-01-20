@@ -42,7 +42,7 @@ public class RobotContainer {
   private DoublePreference spinOffsetY = new DoublePreference("Spin Offset Y", Constants.Swerve.trackWidth / 2);
   
   /* Subsystems */
-  private final Swerve s_Swerve = new Swerve();
+  public final Swerve s_Swerve = new Swerve();
 
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */

@@ -16,6 +16,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import com.kauailabs.navx.frc.AHRS;
 import edu.wpi.first.wpilibj.SPI;
+import edu.wpi.first.wpilibj.Timer;
 
 
 public class Swerve extends SubsystemBase {
@@ -39,10 +40,16 @@ public class Swerve extends SubsystemBase {
             new SwerveModule(2, Constants.Swerve.Mod2.constants),
             new SwerveModule(3, Constants.Swerve.Mod3.constants)
         };
-
+        
         swerveOdometry = new SwerveDriveOdometry(Constants.Swerve.swerveKinematics, getYaw(), getModulePositions());
-
+        
         resetRotationCenterOffset();
+    }
+    
+    public void resetAllModules() {
+        for(SwerveModule m : mSwerveMods) {
+            m.resetToAbsolute();
+        }
     }
 
     public void drive(Translation2d translation, double rotation, boolean fieldRelative, boolean isOpenLoop) {
