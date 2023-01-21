@@ -30,19 +30,19 @@ public class ZoomToTagCommand extends CommandBase {
 
   private ProfiledPIDController yController = 
     new ProfiledPIDController(
-      2.7, 0.0, 0, 
+      2, 0.0, 0.1, 
       new TrapezoidProfile.Constraints(this.maxSpeed, this.maxAccel)
     );
 
   private ProfiledPIDController xController = 
     new ProfiledPIDController(
-      1.35, 0.0, 0, 
+      1.35, 0.0, 0.1, 
       new TrapezoidProfile.Constraints(this.maxSpeed,this.maxAccel)
     );
 
 
   //defaults for distance and offset tolerances (in meters)
-  private double yTolerance = 1;
+  private double yTolerance = 2;
   private double xTolerance = 0.25;
 
   private double maxSpeed = Constants.Swerve.maxSpeed;
@@ -100,7 +100,7 @@ public class ZoomToTagCommand extends CommandBase {
     }
 
     
-    double yAxis = s_Limelight.getYOffset();
+    double yAxis = -s_Limelight.getYOffset();
     double xAxis = s_Limelight.getXOffset();
 
     SmartDashboard.putNumber("raw xOffset", xAxis);

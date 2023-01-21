@@ -107,6 +107,19 @@ public class Swerve extends SubsystemBase {
         return this.getYaw().getDegrees();
     }
 
+    public double getHeadingRadians() {
+        return angleWrap(this.getYaw().getRadians());
+    }
+
+    public static double angleWrap(double angle) {
+        double modAngle = Math.signum(angle) < 0 ? (Math.PI * 2) - Math.abs(angle) % (Math.PI * 2) : Math.abs(angle) % (Math.PI * 2);
+        if(modAngle > (Math.PI)) {
+            return modAngle - Math.PI * 2;
+        } else {
+            return modAngle;
+        }
+    }
+
     public void zeroIMU(){
         this.IMU.zeroYaw();
     }

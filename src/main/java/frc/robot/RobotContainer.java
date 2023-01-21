@@ -79,7 +79,7 @@ public class RobotContainer {
     
     
     driverAButton.whileHeld(new ZoomToTagCommand(s_Swerve, s_Limelight, fieldRelative, openLoop));
-    driverDpadUp.whenPressed(new SnapToHeading(s_Swerve, 0));
+    driverDpadUp.whileHeld(new SnapToHeading(s_Swerve, 0));
     driverDpadDown.whenPressed(new SnapToHeading(s_Swerve, 180));
     driverDpadLeft.whenPressed(new SnapToHeading(s_Swerve, 90));
     driverDpadRight.whenPressed(new SnapToHeading(s_Swerve, 270));

@@ -33,9 +33,9 @@ public class Limelight extends SubsystemBase {
   private ReportingBoolean tvReporter = new ReportingBoolean("Limelight tv", ReportingLevel.TEST);
 
   //camera height from floor
-  private final double h1 = 0.7112;
+  private final double h1 = 0.72;
   //target height from floor
-  private final double h2 = 2.61;
+  private final double h2 = 1.3;
   //camera setback angle in degrees
   private final Measurement a1 = new Measurement(Unit.DEGREES, 35);
 

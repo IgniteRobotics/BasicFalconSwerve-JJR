@@ -23,24 +23,27 @@ public class SnapToHeading extends ProfiledPIDCommand {
         // The ProfiledPIDController used by the command
         new ProfiledPIDController(
             // The PID gains
-            0.8,
+            1,
             0,
-            0,
+            0.1,
             // The motion profile constraints
             new TrapezoidProfile.Constraints(Constants.Swerve.maxAngularVelocity, Constants.Swerve.maxAngularVelocity)),
         // This should return the measurement
-        swerve::getHeadingDegrees,
+        swerve::getHeadingRadians,
         // This should return the goal (can also be a constant)
         heading,
         // This uses the output
-        (output, setpoint) -> swerve.drive(new Translation2d(0,0), heading, true, false)
+        (output, setpoint) -> {
+          System.out.println(output);
+          swerve.drive(new Translation2d(0,0), output, false, false);
+        }
         );
     // Use addRequirements() here to declare subsystem dependencies.
     this.m_Swerve = swerve;
     this.m_heading = heading;
     addRequirements(m_Swerve);
     // Configure additional PID options by calling `getController` here.
-    getController().setTolerance(0.5);
+    getController().setTolerance(0.1);
 
   }
 
