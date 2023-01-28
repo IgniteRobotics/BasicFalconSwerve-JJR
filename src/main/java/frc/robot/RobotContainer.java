@@ -12,7 +12,7 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-
+import frc.robot.autos.exampleAuto;
 import frc.robot.commands.*;
 import frc.robot.subsystems.*;
 
@@ -35,10 +35,12 @@ public class RobotContainer {
   private final JoystickButton zeroGyro = new JoystickButton(driver, XboxController.Button.kY.value);
   private final JoystickButton spinLeft = new JoystickButton(driver, XboxController.Button.kLeftBumper.value);
   private final JoystickButton spinRight = new JoystickButton(driver, XboxController.Button.kRightBumper.value);
+  private final JoystickButton balance = new JoystickButton(driver, XboxController.Button.kA.value);
 
   /* Preferences */
   private DoublePreference spinOffsetX = new DoublePreference("Spin Offset Y", Constants.Swerve.wheelBase / 2);
   private DoublePreference spinOffsetY = new DoublePreference("Spin Offset X", Constants.Swerve.trackWidth / 2);
+  private DoublePreference balanceThreshold = new DoublePreference("Balance Threshold", 5);
   
   /* Subsystems */
   private final Swerve s_Swerve = new Swerve();
@@ -66,6 +68,8 @@ public class RobotContainer {
 
     spinLeft.whileTrue(new SpinCommand(s_Swerve, driver, translationAxis, strafeAxis, spinOffsetX, spinOffsetY, -Constants.Swerve.maxAngularVelocity));
     spinRight.whileTrue(new SpinCommand(s_Swerve, driver, translationAxis, strafeAxis, spinOffsetX, spinOffsetY, Constants.Swerve.maxAngularVelocity));
+
+    balance.whileTrue(new AutoBalance(s_Swerve, balanceThreshold, 1));
   }
 
   /**
@@ -75,6 +79,6 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // An ExampleCommand will run in autonomous
-    return new AutoBalance(s_Swerve); // for testing purposes only :D
+    return new exampleAuto(s_Swerve);
   }
 }
